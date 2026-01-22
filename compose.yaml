@@ -1,17 +1,8 @@
 services:
   reverse-proxy:
     image: traefik:v3.6
-    command: 
-      - "--api.insecure=true"
-      - "--providers.docker"
-      - "--providers.docker.exposedbydefault=false"
-      - "--entrypoints.websecure.address=:443"
-      - "--certificatesresolvers.websiteresolver.acme.tlschallenge=true"
-      - "--certificatesresolvers.websiteresolver.acme.email=kaldis@kaldisberzins.com"
-      - "--certificatesresolvers.websiteresolver.acme.storage=/letsencrypt/acme.json"
-      - "--entrypoints.web.http.redirections.entrypoint.to=websecure"
-      - "--entrypoints.web.http.redirections.entrypoint.scheme=https"
-
+    environment:
+      - CF_DNS_API_TOKEN=${CF_DNS_API_TOKEN}
     ports:
     # HTTP
       - "80:80"
@@ -20,14 +11,15 @@ services:
     # Traefik Web UI
       - "8080:8080"
     volumes:
-      - letsencrypt:/letsencrypt
+      - letsencrypt:/letsencrypt:rw
       - /var/run/docker.sock:/var/run/docker.sock
+      - ./config/traefik.yaml:/ect/traefik/traefik.yaml:ro
   server:
     image: ghcr.io/kaldis-berzins/cv-website:main
     labels:
       - "traefik.enable=true"
       - "traefik.http.routers.cv-website.rule=Host(`kaldisberzins.com`)"
       - "traefik.http.routers.cv-website.entrypoints=websecure"
-      - "traefik.http.routers.cv-website.tls.certresolver=websiteresolver"
+      - "traefik.http.routers.cv-website.tls.certresolver=cloudflare"
 volumes:
   letsencrypt:
