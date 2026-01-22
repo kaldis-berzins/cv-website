@@ -16,7 +16,7 @@ entryPoints:
   websecure:
     address: :443
 certificateResolvers:
-  cloudflare:
+  myresolver:
     acme:
       email: "kaldis@kaldisberzins.com"
       storage: "/letsencrypt/acme.json"

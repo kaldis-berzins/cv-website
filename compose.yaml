@@ -20,6 +20,6 @@ services:
       - "traefik.enable=true"
       - "traefik.http.routers.cv-website.rule=Host(`kaldisberzins.com`)"
       - "traefik.http.routers.cv-website.entrypoints=websecure"
-      - "traefik.http.routers.cv-website.tls.certresolver=cloudflare"
+      - "traefik.http.routers.cv-website.tls.certresolver=myresolver"
 volumes:
   letsencrypt:
