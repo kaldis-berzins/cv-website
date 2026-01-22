@@ -1,11 +1,6 @@
 services:
   reverse-proxy:
     image: traefik:v3.6
-    healthcheck:
-      test: ["CMD", "wget", "-qO-", "http://localhost:3000/healthcheck"]
-      interval: 10s
-      timeout: 3s
-      retries: 5
     environment:
       - CF_DNS_API_TOKEN=${CF_DNS_API_TOKEN}
     ports:
