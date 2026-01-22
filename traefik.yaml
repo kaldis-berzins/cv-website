@@ -35,4 +35,4 @@ providers:
     endpoint: "unix:///var/run/docker.sock"
     exposedByDefault: false
     watch: true
-    network: traefik_proxy
+    network: web_traefik_proxy
