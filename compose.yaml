@@ -1,6 +1,18 @@
 services:
+  reverse-proxy:
+    image: traefik:v3.6
+    command: 
+      - "--api.insecure=true"
+      - "--providers.docker"
+    ports:
+    # HTTP
+      - "80:80"
+    # Web UI
+      - "8080:8080"
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
   server:
     image: ghcr.io/kaldis-berzins/cv-website:main
+    labels:
+      - "traefik.http.routers.cv-website.rule=Host(`kaldisberzins.com`)"
     container_name: cv-website
-    ports:
-      - 3000:3000
