@@ -23,6 +23,10 @@ services:
         constraints:
           - node.role == manager
 
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.services.traefik.loadbalancer.server.port=8080"
+
   server:
     image: ghcr.io/kaldis-berzins/cv-website:main
     networks:
