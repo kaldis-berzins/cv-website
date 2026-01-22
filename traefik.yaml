@@ -8,6 +8,7 @@ api:
   insecure: true
 entryPoints:
   web:
+    address: :80
     http:
       redirections:
         entrypoint:
@@ -15,7 +16,7 @@ entryPoints:
           scheme: https
   websecure:
     address: :443
-certificateResolvers:
+certificatesResolvers:
   myresolver:
     acme:
       email: "kaldis@kaldisberzins.com"
