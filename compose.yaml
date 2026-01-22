@@ -15,4 +15,3 @@ services:
     image: ghcr.io/kaldis-berzins/cv-website:main
     labels:
       - "traefik.http.routers.cv-website.rule=Host(`kaldisberzins.com`)"
-    container_name: cv-website
