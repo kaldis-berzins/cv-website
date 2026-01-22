@@ -1,14 +1,11 @@
 services:
-  watchtower:
-    image: containrrr/watchtower
-    command:
-      - "--label-enable"
-      - "--interval"
-      - "30"
-    volumes:
-      - /var/run/docker.sock:/var/run/docker.sock
   reverse-proxy:
     image: traefik:v3.6
+    healthcheck:
+      test: ["CMD", "wget", "-qO-", "http://localhost:3000/healthcheck"]
+      interval: 10s
+      timeout: 3s
+      retries: 5
     environment:
       - CF_DNS_API_TOKEN=${CF_DNS_API_TOKEN}
     ports:
@@ -22,13 +19,32 @@ services:
       - letsencrypt:/letsencrypt
       - /var/run/docker.sock:/var/run/docker.sock
       - ./traefik.yaml:/etc/traefik/traefik.yaml:ro
+    deploy:
+      placement:
+        constraints:
+          - node.role == manager
+
   server:
     image: ghcr.io/kaldis-berzins/cv-website:main
+    deploy:
+      replicas: 3
+      update_config:
+        parallelism: 1
+        delay: 10s
+        order: start-first
+        failure_action: rollback
+      restart_policy:
+        condition: on-failure
+      healthcheck:
+        test: ["CMD", "wget", "-qO-", "http://localhost:3000/healthcheck"]
+        interval: 10s
+        timeout: 3s
+        retries: 3
+        start_period: 20s  # Gives the app 20s to boot before failing checks
     labels:
       - "traefik.enable=true"
       - "traefik.http.routers.cv-website.rule=Host(`kaldisberzins.com`)"
       - "traefik.http.routers.cv-website.entrypoints=websecure"
       - "traefik.http.routers.cv-website.tls.certresolver=myresolver"
-      - "com.centurylinklabs.watchtower.enable=true"
 volumes:
   letsencrypt:
