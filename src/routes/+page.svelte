@@ -41,7 +41,7 @@
 </script>
 <div id="app">
     <nav>
-        <div class="home">K.K.B.</div>
+        <div class="home"><a href="/">K.K.B.</a></div>
     </nav>
     <div id="content">
         <img src="{portrait}" alt="Portrait of Kaldis" id="portrait">
@@ -75,9 +75,14 @@
             padding-top: 16px;
             padding-bottom: 16px;
             .home {
-                font-family: 'Noticia Text';
-                font-size: 48px;
-                font-weight: bold;
+                a {
+                    font-size: 48px;
+                    font-weight: bold;
+                    text-decoration: none;
+                    color: black;
+                    font-family: 'Noticia Text';
+                    user-select: none;
+                }
             }
         }
         height: 100%;
