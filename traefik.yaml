@@ -4,8 +4,8 @@ global:
 log:
   level: DEBUG
 api:
-  dashboard: true # Change these to true
-  insecure: true  # to enable the debug screen
+  dashboard: true
+  insecure: true
 entryPoints:
   web:
     address: :80
@@ -16,8 +16,6 @@ entryPoints:
           scheme: https
   websecure:
     address: :443
-    http:
-      tls: true
 certificatesResolvers:
   myresolver:
     acme:
@@ -31,8 +29,6 @@ certificatesResolvers:
           - "1.1.1.1:53"
           - "8.8.8.8:53"
 providers:
-  swarm:
+  docker:
     endpoint: "unix:///var/run/docker.sock"
     exposedByDefault: false
-    watch: true
-    network: web_traefik_proxy
