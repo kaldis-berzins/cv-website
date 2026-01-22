@@ -1,0 +1,6 @@
+services:
+  server:
+    image: ghcr.io/kaldis-berzins/cv-website:main
+    container_name: cv-website
+    ports:
+      - 3000:3000
