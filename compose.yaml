@@ -9,8 +9,12 @@ services:
       - "--certificatesresolvers.websiteresolver.acme.tlschallenge=true"
       - "--certificatesresolvers.websiteresolver.acme.email=kaldis@kaldisberzins.com"
       - "--certificatesresolvers.websiteresolver.acme.storage=/letsencrypt/acme.json"
+      - "--entrypoints.web.http.redirections.entrypoint.to=websecure"
+      - "--entrypoints.web.http.redirections.entrypoint.scheme=https"
 
     ports:
+    # HTTP
+      - "80:80"
     # HTTPS
       - "443:443"
     # Traefik Web UI
