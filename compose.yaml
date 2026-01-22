@@ -13,7 +13,7 @@ services:
     volumes:
       - letsencrypt:/letsencrypt:rw
       - /var/run/docker.sock:/var/run/docker.sock
-      - ./config/traefik.yaml:/ect/traefik/traefik.yaml:ro
+      - ./traefik.yaml:/etc/traefik/traefik.yaml:ro
   server:
     image: ghcr.io/kaldis-berzins/cv-website:main
     labels:
