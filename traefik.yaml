@@ -4,8 +4,8 @@ global:
 log:
   level: DEBUG
 api:
-  dashboard: false # Change these to true
-  insecure: false  # to enable the debug screen
+  dashboard: true # Change these to true
+  insecure: true  # to enable the debug screen
 entryPoints:
   web:
     address: :80
