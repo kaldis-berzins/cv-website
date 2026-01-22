@@ -41,5 +41,11 @@ services:
       - "traefik.http.routers.cv-website.rule=Host(`kaldisberzins.com`)"
       - "traefik.http.routers.cv-website.entrypoints=websecure"
       - "traefik.http.routers.cv-website.tls.certresolver=myresolver"
+
+      # Explicit service mapping (IMPORTANT)
+      - "traefik.http.routers.cv-website.service=cv-website"
+
+      # Backend port (IMPORTANT)
+      - "traefik.http.services.cv-website.loadbalancer.server.port=3000"
 volumes:
   letsencrypt:
