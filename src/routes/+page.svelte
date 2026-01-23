@@ -1,22 +1,22 @@
 <script>
-    import blur from '$lib/assets/blur2.jpg';
     import portrait from '$lib/assets/portrait.jpeg';
 
     import github from '$lib/assets/github-mark.png';
     import linkedin from '$lib/assets/linkedin.png';
 
     let circle;
+    let hovering = false;
+
     $effect(() => {       
         let previousX = 0;
         let previousY = 0;
         let mousedown = false;
-
         window.addEventListener("mousemove", (e) => {
             circle.style.setProperty("--x", `${e.clientX}px`);
             circle.style.setProperty("--y", `${e.clientY}px`);
             circle.style.setProperty("display", "block");
             
-            if (previousX !== 0 && previousY !== 0 && !mousedown) {
+            if (previousX !== 0 && previousY !== 0 && !mousedown && !hovering) {
                 let dx = Math.abs(previousX - e.clientX);
                 let dy = Math.abs(previousY - e.clientY);
                 let d = Math.sqrt(dx * dx + dy * dy);
@@ -28,29 +28,42 @@
         });
 
         window.addEventListener("mousedown", (e) => {
-            circle.style.setProperty("--size", "25px");
+            if(hovering) circle.style.setProperty("--size", "85px");
+            else circle.style.setProperty("--size", "25px");
+
             mousedown = true;
         });
 
         window.addEventListener("mouseup", (e) => {
-            circle.style.setProperty("--size", "20px");
+            if(hovering) circle.style.setProperty("--size", "75px");
+            else circle.style.setProperty("--size", "20px");
             mousedown = false;
         });
     });
+
+    function onmouseenter() {
+        circle.style.setProperty("--size", "75px");
+        hovering = true;
+    }
+
+    function onmouseleave() {
+        circle.style.setProperty("--size", "20px");
+        hovering = false;
+    }
     
 </script>
 <div id="app">
     <nav>
-        <div class="home">K.K.B.</div>
+        <a href="/" class="home" {onmouseenter} {onmouseleave}>K.K.B.</a>
     </nav>
     <div id="content">
         <img src="{portrait}" alt="Portrait of Kaldis" id="portrait">
         <h1>Kaldis Kariņš Bērziņš</h1>
         <div id="links-container">
-            <a href="https://www.linkedin.com/in/kaldis-berzins-600b2a2a7/" class="link"><img src="{linkedin}" alt="LinkedIn">LinkedIn</a>
-            <a href="https://github.com/kaldis-berzins" class="link"><img src="{github}" alt="GitHub">GitHub</a>
+            <a href="https://www.linkedin.com/in/kaldis-berzins-600b2a2a7/" class="link" {onmouseenter} {onmouseleave}><img src="{linkedin}" alt="LinkedIn">LinkedIn</a>
+            <a href="https://github.com/kaldis-berzins" class="link"><img src="{github}" alt="GitHub" {onmouseenter} {onmouseleave}>GitHub</a>
             
-            <a href="https://www.linkedin.com/in/kaldis-berzins-600b2a2a7/" class="link">
+            <a href="https://www.linkedin.com/in/kaldis-berzins-600b2a2a7/" class="link" {onmouseenter} {onmouseleave}>
                 <span class="material-symbols-outlined">
                     file_open
                 </span>
@@ -58,7 +71,7 @@
             </a>
         </div>
         
-        <div id="cursor-circle" bind:this="{circle}" style="display: none"><img alt="" src="{blur}"/></div>
+        <div id="cursor-circle" bind:this="{circle}" style="display: none"><div class="mesh-background cursor-background"></div></div>
     </div>
 </div>
 
@@ -78,6 +91,8 @@
                 font-family: 'Noticia Text';
                 font-size: 48px;
                 font-weight: bold;
+                text-decoration: none;
+                color: black;
             }
         }
         height: 100%;
@@ -86,6 +101,7 @@
             flex-direction: column;
             align-items: center;
             padding-top: 64px;
+            padding-bottom: 64px;
             #portrait {
                 border-radius: 32px;
             }
@@ -128,6 +144,16 @@
         font-weight: bold;
         text-align: center;
     }
+
+    @media (max-width: 768px) {
+        h1 {
+            font-size: 48px;
+        }
+
+        #cursor-circle {
+            opacity: 0;
+        }
+    }
     
     #cursor-circle {
         clip-path: circle(var(--size) at var(--x) var(--y));
@@ -139,5 +165,10 @@
         left: 0;
         pointer-events: none;
         mix-blend-mode: difference;
+
+        .cursor-background {
+            width: 100%;
+            height: 100%;
+        }
     }
 </style>
