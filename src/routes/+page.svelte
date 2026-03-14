@@ -1,10 +1,12 @@
 <script>
     import portrait from '$lib/assets/portrait.jpeg';
-
-    import github from '$lib/assets/github-mark.png';
-    import linkedin from '$lib/assets/linkedin.png';
+    import DarkMode from '@iconify-svelte/material-symbols/dark-mode-rounded';
+    import LightMode from '@iconify-svelte/material-symbols/light-mode-rounded';
+    import GitHub from '@iconify-svelte/mdi/github';
+    import LinkedIn from '@iconify-svelte/mdi/linkedin';
 
     let circle;
+    let darkMode = $state(false);
     let hovering = false;
 
     $effect(() => {       
@@ -39,36 +41,50 @@
             else circle.style.setProperty("--size", "20px");
             mousedown = false;
         });
+
+        if(localStorage.getItem("darkMode") === null) {
+            darkMode = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+        } else {
+            darkMode = localStorage.getItem("darkMode") === "true";
+        }
     });
 
     function onmouseenter() {
-        circle.style.setProperty("--size", "75px");
-        hovering = true;
+        if (circle) {
+            circle.style.setProperty("--size", "75px");
+            hovering = true;
+        }
     }
 
     function onmouseleave() {
-        circle.style.setProperty("--size", "20px");
-        hovering = false;
+        if (circle) {
+            circle.style.setProperty("--size", "20px");
+            hovering = false;
+        }
     }
-    
+
+    function toggleDarkMode() {
+        darkMode = !darkMode;
+        localStorage.setItem("darkMode", darkMode);
+    }
 </script>
-<div id="app">
+<div id="app" class="{darkMode ? 'dark-mode mesh-background' : ''}">
     <nav>
         <a href="/" class="home" {onmouseenter} {onmouseleave}>K.K.B.</a>
+        <button id="dark-mode-toggle" {onmouseenter} {onmouseleave} onclick={toggleDarkMode}>
+            {#if darkMode}
+                 <LightMode class="icon" width="32px" height="32px"/>
+            {:else}
+                <DarkMode class="icon" width="32px" height="32px"/>
+            {/if}
+        </button>
     </nav>
     <div id="content">
         <img src="{portrait}" alt="Portrait of Kaldis" id="portrait">
         <h1>Kaldis Kariņš Bērziņš</h1>
         <div id="links-container">
-            <a href="https://www.linkedin.com/in/kaldis-berzins-600b2a2a7/" class="link" {onmouseenter} {onmouseleave}><img src="{linkedin}" alt="LinkedIn">LinkedIn</a>
-            <a href="https://github.com/kaldis-berzins" class="link"><img src="{github}" alt="GitHub" {onmouseenter} {onmouseleave}>GitHub</a>
-            
-            <a href="https://www.linkedin.com/in/kaldis-berzins-600b2a2a7/" class="link" {onmouseenter} {onmouseleave}>
-                <span class="material-symbols-outlined">
-                    file_open
-                </span>
-                Resume
-            </a>
+            <a href="https://www.linkedin.com/in/kaldis-berzins-600b2a2a7/" class="link" {onmouseenter} {onmouseleave}><LinkedIn class="icon"/>LinkedIn</a>
+            <a href="https://github.com/kaldis-berzins" class="link" {onmouseenter} {onmouseleave}><GitHub class="icon"/>GitHub</a>
         </div>
         
         <div id="cursor-circle" bind:this="{circle}" style="display: none"><div class="mesh-background cursor-background"></div></div>
@@ -79,23 +95,52 @@
 
 
 <style lang="scss">
+    :root {
+        --text: #000000;
+        --background: #ffffff;
+    }
+
+    .dark-mode {
+        --text: #ffffff;
+        --background: #000000;
+        filter: none;
+    }
+
+    :global(.icon) {
+        color: var(--text);
+        width: 1em;
+        height: 1em;
+    }
+
     #app {
-        background-color: white;
+        background-color: var(--background);
+        color: var(--text);
         width: 100%;
         min-height: 100vh;
         nav {
-            padding-left: 48px;
+            padding-left: 32px;
+            padding-right: 32px;
             padding-top: 16px;
             padding-bottom: 16px;
+            display: flex;
             .home {
                 font-family: 'Noticia Text';
                 font-size: 48px;
                 font-weight: bold;
                 text-decoration: none;
-                color: black;
+                color: var(--text);
+            }
+
+            #dark-mode-toggle {
+                margin-left: auto;
+                font-size: 48px;
+                background: none;
+                border: none;
+                cursor: pointer;
+                color: var(--text);
             }
         }
-        height: 100%;
+
         #content {
             display: flex;
             flex-direction: column;
@@ -104,6 +149,8 @@
             padding-bottom: 64px;
             #portrait {
                 border-radius: 32px;
+                position: relative;
+                z-index: 10;
             }
 
             #links-container {
@@ -116,23 +163,17 @@
                     flex-direction: column;
                     align-items: center;
                     gap: 8px;
-                    color: black;
+                    color: var(--text);
                     text-decoration: none;
 
                     &:hover {
                         text-decoration: underline;
                     }
+                }
 
-                    .material-symbols-outlined {
-                        font-size: 64px;
-                        &:hover {
-                            text-decoration: none;
-                        }
-                    }
-
-                    img {
-                        max-height: 64px;
-                    }
+                :global(.link .icon) {
+                    width: 96px;
+                    height: 96px;
                 }
             }
         }
