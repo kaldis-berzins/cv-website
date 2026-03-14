@@ -1,5 +1,4 @@
 @import url('https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=Noticia+Text:ital,wght@0,400;0,700;1,400;1,700&display=swap');
-@import url('https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined');
 
 * {
     box-sizing: border-box;
@@ -457,12 +456,5 @@ body {
     background-blend-mode: normal, normal, normal, normal, normal, normal, normal, normal, normal, normal;
     will-change: transform, opacity;
     contain: paint;
-    filter: invert();
-}
-
-.mesh-background-2 {
-    background-color: hsla(359, 100%, 50%, 1);
-    background-image: radial-gradient(circle at 0% 99%, hsla(11, 100%, 50%, 1) 0%, transparent 67%), radial-gradient(circle at 46% 94%, hsla(177, 100%, 50%, 1) 0%, transparent 81%), radial-gradient(circle at 89% 8%, hsla(304, 100%, 9%, 1) 0%, transparent 150%), radial-gradient(circle at 89% 8%, hsla(206, 100%, 9%, 1) 0%, transparent 150%), radial-gradient(circle at 93% 95%, hsla(236, 100%, 23%, 1) 0%, transparent 66%), radial-gradient(circle at 89% 8%, hsla(0, 100%, 99%, 1) 0%, transparent 150%), radial-gradient(circle at 89% 8%, hsla(55, 94%, 54%, 1) 0%, transparent 150%);
-    background-blend-mode: normal, normal, normal, normal, normal, normal, normal;
     filter: invert();
 }
